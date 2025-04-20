@@ -1,0 +1,2636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Udemy‑style Header + Carousel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --purple: #6f2bed;
+      --purple-light: rgba(111,45,237,0.08);
+      --border: #ddd;
+      --text-primary: #2d2f31;
+      --text-secondary: #6a6f73;
+      --bg-hover: #f7f9fa;
+      --badge-bestseller: #eceb98;
+      --badge-premium: #a435f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding-top: 100px;
+      color: var(--text-primary);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 12px 20px;
+      z-index: 10;
+      gap: 10px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 24px;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-btn {
+      margin-left: 16px;
+      font-size: 14px;
+      border: none;
+      background: transparent;
+      color: #000;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .dropdown-btn:hover {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      z-index: 1000;
+      flex-direction: row;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content .column {
+      margin-right: 40px;
+      min-width: 200px;
+    }
+
+    .dropdown-content h4 {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .dropdown-content a {
+      display: block;
+      color: #333;
+      font-size: 14px;
+      padding: 4px 0;
+      text-decoration: none;
+    }
+
+    .dropdown-content a:hover {
+      color: var(--purple);
+    }
+
+    .search {
+      flex: 1;
+      max-width: 600px;
+      position: relative;
+      margin-left: 140px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 8px 48px 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      font-size: 14px;
+    }
+
+    .search button {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background: var(--purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .search button svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a, nav button {
+      margin-left: 16px;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    nav a:hover, nav button:hover {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .login {
+      padding: 6px 16px;
+      border: 1px solid var(--purple);
+      border-radius: 4px;
+      color: var(--purple);
+    }
+
+    .login:hover {
+      background: var(--purple-light);
+    }
+
+    .signup {
+      padding: 6px 16px;
+      border: 1px solid var(--purple);
+      background: var(--purple);
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .signup:hover {
+      background: #892DE1;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+    }
+
+    .icon-btn:hover {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .icon-btn-lan {
+      border: 1px solid var(--purple);
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+    }
+
+    .icon-btn-lan:hover {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    /* carousel styles */
+    .slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mySlides {
+  display: none;
+  position: relative;
+  height: 100%;
+}
+
+.carousel-content {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 450px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.carousel-content h2 {
+  color: #2d2f31;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.carousel-content p {
+  color: #4b4b4b;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.buttons button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-purple {
+  background: #6a1b9a;
+  color: white;
+  border: none;
+}
+
+.btn-outline-purple {
+  background: transparent;
+  color: #6a1b9a;
+  border: 1px solid #6a1b9a;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  font-size: 24px;
+  padding: 8px 12px;
+  margin-top: -22px;
+  color: black;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.prev {
+  left: 16px;
+}
+
+.next {
+  right: 16px;
+}
+
+
+    /* Skills section */
+    .skills-section {
+      padding: 60px 80px;
+      background: #fff;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    /* Tabs */
+    .tab-container {
+      display: flex;
+      gap: 24px;
+      border-bottom: 2px solid #eee;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      position: relative;
+      padding: 12px 4px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      height: 3px;
+      background-color: var(--text-primary);
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      border-radius: 2px;
+    }
+
+    /* Category pills carousel */
+ 
+    .carousel-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.nav-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 6px 10px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.left-btn {
+  margin-right: -40px;
+}
+
+.right-btn {
+  margin-left: -40px;
+}
+
+.courses {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 8px 0;
+  margin: 0 40px;
+}
+
+.courses::-webkit-scrollbar {
+  display: none;
+}
+
+.course-pill {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: var(--bg-light);
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.course-pill.active {
+  background: var(--text-primary);
+  color: #fff;
+}
+
+.course-pill strong {
+  display: block;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.course-pill:hover {
+  transform: translateY(-3px);
+}
+
+ 
+
+    .courses::-webkit-scrollbar { 
+      display: none; 
+    }
+
+    .course {
+      flex-shrink: 0;
+      min-width: max-content;
+      padding: 12px 16px;
+      border-radius: 30px;
+      background-color: #f3f3f3;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-primary);
+      transition: transform 0.2s, background-color 0.2s;
+      cursor: pointer;
+    }
+
+    .course strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .course:hover {
+      background-color: #e2e2e8;
+      transform: translateY(-3px);
+    }
+
+    .course.active-course {
+      background-color: var(--text-primary);
+      color: #fff;
+    }
+
+    /* Nav buttons */
+
+
+
+    /* Course Cards */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .course-card {
+      position: relative;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      padding-bottom: 42px;
+    }
+
+    .course-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .course-image {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%;
+      overflow: hidden;
+      margin-bottom: 8px;
+      border-radius: 4px;
+    }
+
+    .course-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .course-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .course-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+}
+
+    .course-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+
+    .course-preview {
+      padding: 16px;
+      color: white;
+      text-align: left;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-preview h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .course-preview p {
+      font-size: 14px;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .preview-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .preview-topics span {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .add-to-cart, .add-to-wishlist {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: auto;
+      margin-bottom: 8px;
+    }
+
+    .add-to-cart {
+      background: var(--purple);
+      color: white;
+    }
+
+    .add-to-wishlist {
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+    }
+
+    .course-card {
+  position: relative;
+  padding: 12px 16px 30px 16px; /* Add extra padding at the bottom */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+    .instructor {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .course-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .rating-score {
+      color: #b4690e;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .stars {
+      color: #e59819;
+      font-size: 12px;
+      margin-right: 4px;
+    }
+
+    .rating-count {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .course-price {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .price-current {
+      font-weight: 700;
+    }
+
+    .price-original {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .badge-container {
+  position: absolute;
+  bottom: 5px;
+  left: 16px; /* Match the card's left padding */
+  display: flex;
+  gap: 8px;
+}
+
+.premium-badge,
+.bestseller-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.premium-badge {
+  background-color: var(--badge-premium);
+  color: white;
+}
+
+.bestseller-badge {
+  background-color: var(--badge-bestseller);
+  color: #3d3c0a;
+}
+
+
+
+    .show-all-container {
+      display: flex;
+      justify-content: left;
+      margin-top: 20px;
+    }
+
+    .show-all-btn {
+      padding: 12px 24px;
+      background-color: transparent;
+      border: 1px solid var(--text-primary);
+      color: var(--text-primary);
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .show-all-btn:hover {
+      background-color: rgba(45, 47, 49, 0.04);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .course-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .skills-section {
+        padding: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+      .carousel-slide {
+        flex-direction: column;
+        padding: 40px 20px;
+      }
+      .carousel-content, .carousel-slide img {
+        max-width: 100%;
+      }
+      .skills-section {
+        padding: 30px 20px;
+      }
+    }
+
+    /* trusted brands  */
+    
+
+    .logo-bar {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .logo-bar p {
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .logo-bar img {
+      height: 40px;
+      margin: 0 20px;
+      opacity: 0.7;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .card-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    .card-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      max-width: 1100px;
+      padding: 0 20px;
+      scroll-behavior: smooth;
+    }
+
+    .card {
+      position: relative;
+      flex: 0 0 auto;
+      width: 220px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 10px 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    .card-author {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .rating {
+      font-size: 11px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stars {
+      color: orange;
+    }
+
+    .price {
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .tag {
+      background: #eee;
+      font-size: 10px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      color: #333;
+    }
+
+    .tag.purple {
+      background-color: purple;
+      color: #fff;
+    }
+
+    .tag.green {
+      background-color: green;
+      color: #fff;
+    }
+
+    .hover-preview {
+      display: none;
+      position: absolute;
+      top: -20px;
+      left: 240px;
+      width: 300px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      z-index: 999;
+      transition: opacity 0.3s ease;
+    }
+
+    .hover-preview h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .hover-preview .meta {
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .hover-preview ul {
+      padding-left: 20px;
+      font-size: 12px;
+    }
+
+    .hover-preview button {
+      margin-top: 12px;
+      background-color: purple;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .card:hover .hover-preview {
+      display: block;
+    }
+
+   /* new feature -  freelancer hub */
+   
+   .freelancer-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  background: #F6F7F9;
+  border-radius: 12px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.content {
+  flex: 1;
+  max-width: 50%;
+
+}
+
+.content h2 {
+  font-size: 28px;
+  color: #2d2f31;
+}
+
+.content h2 span {
+  color: #a435f0;
+}
+
+.step {
+  display: flex;
+  align-items: start;
+  margin: 20px 0;
+  padding-left: 40px;   
+}
+
+.step img {
+  width: 40px;
+  margin-right: 16px;
+  margin-top: 5px;
+}
+
+.step h3 {
+  color: #a435f0;
+  margin: 0;
+}
+
+.step p {
+  margin: 5px 0 0 0;
+  color: #2d2f31;
+}
+
+.button-free {
+  margin-top: 20px;
+  background: #2d2f31;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.image-free {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-free img {
+  width: 100%;
+  max-width: 350px;
+}
+
+.btn-start{
+    margin-left: 40px;
+}
+
+
+
+
+
+    /* goal_section */
+    
+    
+
+.learning-goals {
+  background: #f7f7fb;
+  padding: 60px 20px;
+}
+
+.learning-goals__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+.learning-goals__left {
+  flex: 1;
+}
+
+.learning-goals__title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #1c1d1f;
+}
+
+.learning-goals__list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual goal cards */
+.learning-goals__item {
+  display: flex;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+.learning-goals__item:hover,
+.learning-goals__item--active {
+  background-color: #f1ebff;
+  border-color: #a435f0;
+}
+
+/* Icon */
+.learning-goals__icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Text */
+.learning-goals__content h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #1c1d1f;
+}
+.learning-goals__content p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #606060;
+}
+.learning-goals__content a {
+  font-size: 13px;
+  color: #5624d0;
+  text-decoration: none;
+  font-weight: bold;
+}
+.learning-goals__content a:hover {
+  text-decoration: underline;
+}
+
+/* Enterprise plan badge in heading */
+.enterprise-badge {
+  font-size: 12px;
+  color: #6a6f73;
+  margin-left: 5px;
+}
+
+/* Right‐side image */
+.learning-goals__right {
+  flex: 1;
+  text-align: right;
+}
+.learning-goals__image {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Responsive stack on mobile */
+@media (max-width: 900px) {
+  .learning-goals__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .learning-goals__right {
+    margin-top: 30px;
+    text-align: center;
+  }
+}
+
+ /* team-plans */
+ 
+ .pricing-section {
+    padding: 60px 0;
+    background-color: #fff;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .pricing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .pricing-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary, #2d2f31);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .pricing-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary, #6a6f73);
+    margin-bottom: 32px;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .pricing-cards {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .pricing-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 380px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .plan-header {
+    margin-bottom: 20px;
+  }
+  
+  .plan-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-primary, #2d2f31);
+  }
+  
+  .plan-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary, #6a6f73);
+    margin-bottom: 10px;
+  }
+  
+  .plan-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-secondary, #6a6f73);
+  }
+  
+  .user-icon {
+    color: #6f2bed;
+  }
+  
+  .plan-price {
+    margin-bottom: 24px;
+  }
+  
+  .plan-price h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-primary, #2d2f31);
+  }
+  
+  .billing-info {
+    font-size: 12px;
+    color: var(--text-secondary, #6a6f73);
+  }
+  
+  .subscription-btn, .demo-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #6f2bed;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    gap: 8px;
+  }
+  
+  .subscription-btn:hover, .demo-btn:hover {
+    background-color: #5b24c0;
+  }
+  
+  .features-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .features-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--text-primary, #2d2f31);
+    line-height: 1.4;
+  }
+  
+  .features-list i {
+    color: #6f2bed;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .pricing-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .pricing-card {
+      width: 100%;
+    }
+  } 
+
+  /* testemonials */
+  .container {
+    margin: 0 auto;
+    max-width: 2200px;
+
+    padding: 60px 20px; /* adds space inside */
+    min-height: 50vh;  /* full screen height */
+}
+
+
+        .testimonial-heading {
+            text-align: center;
+            font-size: 28px;
+            color: #2d3b45;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .testimonial-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #5624d0;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 5px;
+        }
+
+        .testimonial-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-mark {
+            font-size: 40px;
+            color: #5624d0;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-text {
+            flex-grow: 1;
+            margin-bottom: 20px;
+            color: #3c3b37;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            color: #5624d0;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 12px;
+            object-fit: cover;
+            background-color: #f7f7f7;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: #2d3b45;
+            margin-bottom: 2px;
+        }
+
+        .user-title {
+            font-size: 12px;
+            color: #6a6f73;
+        }
+
+        .cta-link {
+            display: inline-flex;
+            align-items: center;
+            color: #5624d0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .cta-link:hover {
+            text-decoration: underline;
+        }
+
+        .cta-link svg {
+            margin-left: 5px;
+        }
+
+        .brand-icon {
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+  
+    /* report-section */
+    .report-section {
+  background: white;
+  padding: 80px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.report-container {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  background-color: white;
+}
+
+.report-text {
+  flex: 1 1 400px;
+  max-width: 500px;
+}
+
+.report-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.report-desc {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.report-button {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #7c3aed;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.report-button:hover {
+  background: #5b21b6;
+}
+
+.report-images {
+  position: relative;
+  flex: 1 1 500px;
+  min-width: 300px;
+}
+
+.main-report {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  z-index: 3;
+  position: relative;
+}
+
+.stacked-report {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 100%;
+  max-width: 480px;
+  z-index: 2;
+  transform: rotate(-2deg);
+  opacity: 0.8;
+}
+
+.stacked-report.back {
+  top: 40px;
+  left: 40px;
+  z-index: 1;
+  transform: rotate(-4deg);
+  opacity: 0.6;
+}
+
+ /* trending-section */
+    
+ .trending-section {
+            max-width: 1500px;
+            
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background-color: #F6F7F9;
+        }
+
+        .trending-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1f1f1f;
+        }
+
+        .trending-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .trending-category {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .trending-category h4 {
+            font-weight: 600;
+            color: #1f1f1f;
+        }
+
+        .trending-item a {
+            text-decoration: none;
+            color: #5624d0;
+        }
+
+        .trending-item a:hover {
+            color: #401b9c;
+        }
+
+        .learners {
+            color: #6a6f73;
+            font-size: 0.9rem;
+            display: block;
+        }
+
+        .trending-highlight {
+            border: 1px solid #d1d7dc;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .trending-highlight h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .trending-link {
+            text-decoration: none;
+            color: #5624d0;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .trending-show-all {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid #1f1f1f;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #1f1f1f;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .trending-show-all:hover {
+            background: #f7f9fa;
+        }
+
+        .footer {
+            background-color: #1c1d1f;
+            color: #fff;
+            padding: 2rem 0;
+        }
+
+        .footer-top {
+            padding: 2rem;
+            border-bottom: 1px solid #3e4143;
+        }
+
+        .company-logos {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .company-logos img {
+            height: 30px;
+        }
+
+        .footer-main {
+            padding: 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-column h4 {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #3e4143;
+        }
+
+        .footer-logo {
+            height: 30px;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+        }
+
+  </style>
+</head>
+<body>
+  <!-- Fixed Header -->
+  <header>
+    <div class="header-top">
+      <div class="left">
+        <img src="assets/logo-udemy.svg" alt="Udemy" class="logo">
+        <div class="dropdown">
+          <button class="dropdown-btn">Explore</button>
+          <div class="dropdown-content">
+            <div class="column">
+              <h4>Browse Certifications</h4>
+              <a href="#">Certification preparation</a>
+              <a href="#">Development</a>
+              <a href="#">Business</a>
+              <a href="#">Finance & Accounting</a>
+              <a href="#">IT & Software</a>
+            </div>
+            <div class="column">
+              <h4>Popular Issuers</h4>
+              <a href="#">AWS Certifications</a>
+              <a href="#">Microsoft</a>
+              <a href="#">Cisco</a>
+              <a href="#">CompTIA</a>
+            </div>
+            <div class="column">
+              <h4>Popular Subjects</h4>
+              <a href="#">Cloud Certification</a>
+              <a href="#">Networking</a>
+              <a href="#">Cybersecurity</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#freelancer_hub">Freenlancerhub</a>
+        <a href="#">Plans & Pricing</a>
+        <a href="#">Udemy Business</a>
+        <a href="#">Teach on Udemy</a>
+        <button class="icon-btn">🛒</button>
+        <button class="login">Log in</button>
+        <button class="signup">Sign up</button>
+        <button class="icon-btn-lan">🌐</button>
+      </nav>
+    </div>
+
+    <div class="search">
+      <input type="search" placeholder="Find your next course by skill, topic, or instructor">
+      <button>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" stroke="white" stroke-width="2" fill="none" />
+          <line x1="17" y1="17" x2="21" y2="21" stroke="white" stroke-width="2" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Carousel (placed OUTSIDE header) -->
+  <div class="slideshow-container">
+
+    <div class="mySlides fade">
+      <img src="assets/udemy_car_pic1.jpg" class="carousel-img">
+      <div class="carousel-content">
+        <h2>In-demand skills.<br>Available on demand.</h2>
+        <p>Get the top skills that others are using to advance their careers.</p>
+        <div class="buttons">
+          <button class="btn-purple">Learn Python</button>
+          <button class="btn-outline-purple">Learn Excel</button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="mySlides fade">
+      <img src="assets/car_img_2.jpg" class="carousel-img">
+      <div class="carousel-content">
+        <h2>Master skills for<br>your next job.</h2>
+        <p>Courses in tech, business, and more to help you grow.</p>
+        <div class="buttons">
+          <button class="btn-purple">Learn JavaScript</button>
+          <button class="btn-outline-purple">Learn SQL</button>
+        </div>
+      </div>
+    </div>
+  
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+  
+  </div>
+  
+  
+
+  <!-- Skills section with tab list -->
+  <section class="skills-section">
+    <h2 class="section-title">
+      All the skills you need in one place
+    </h2>
+    <p class="section-subtitle">
+      From critical skills to technical topics, Udemy supports your professional development.
+    </p>
+  
+    <!-- Tabs -->
+    <div class="tab-container">
+      <div class="tab active" data-skill="Data Science">Data Science</div>
+      <div class="tab" data-skill="IT Certifications">IT Certifications</div>
+      <div class="tab" data-skill="Leadership">Leadership</div>
+      <div class="tab" data-skill="Web Development">Web Development</div>
+      <div class="tab" data-skill="Communication">Communication</div>
+      <div class="tab" data-skill="Business Analytics & Intelligence">Business Analytics & Intelligence</div>
+    </div>
+  
+    <!-- Category Pills -->
+    <div class="carousel-wrapper">
+      <button class="nav-btn left-btn">&#8592;</button>
+      <div class="courses">
+        <div class="course-pill active"><strong>ChatGPT</strong>4M+ learners</div>
+        <div class="course-pill"><strong>Data Science</strong>7M+ learners</div>
+        <div class="course-pill"><strong>Python</strong>42M+ learners</div>
+        <div class="course-pill"><strong>Machine Learning</strong>8M+ learners</div>
+        <div class="course-pill"><strong>Deep Learning</strong>2M+ learners</div>
+        <div class="course-pill"><strong>Artificial Intelligence (AI)</strong>4M+ learners</div>
+        <div class="course-pill"><strong>Statistics</strong>1M+ learners</div>
+        <div class="course-pill"><strong>Natural Language Processing</strong>830K learners</div>
+      </div>
+      <button class="nav-btn right-btn">&#8594;</button>
+    </div> 
+
+    <!-- Course Cards -->
+    <div class="course-grid">
+      <div class="course-card">
+        <div class="course-image">
+          <img src="assets/the_ai.jpg" alt="The Complete AI Guide">
+          <div class="course-overlay">
+            <div class="course-preview">
+              <h4>Course Preview</h4>
+              <p>Learn how to use ChatGPT, DeepSeek, Gemini & more AI tools to enhance your productivity and creativity.</p>
+              <div class="preview-topics">
+                <span>AI fundamentals</span>
+                <span>Prompt engineering</span>
+                <span>Practical applications</span>
+              </div>
+              <button class="add-to-cart">Add to cart</button>
+              <button class="add-to-wishlist"><i class="far fa-heart"></i> Add to wishlist</button>
+            </div>
+          </div>
+        </div>
+        <div class="badge-container">
+          <span class="premium-badge">Premium</span>
+          <span class="bestseller-badge">Bestseller</span>
+        </div>
+        
+        <h3>The Complete AI Guide: Learn ChatGPT, Generative AI & More</h3>
+        <p class="instructor">Justin Richards, Bettina Marani, David Jones</p>
+        <div class="course-rating">
+          <span class="rating-score">4.6</span>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <span class="rating-count">(84,431)</span>
+        </div>
+        <div class="course-price">
+          <span class="price-current">€7.49</span>
+          <span class="price-original">€89.99</span>
+        </div>
+
+      </div>
+
+      <div class="course-card">
+        <div class="course-image">
+          <img src="assets/MASTERGPT.jfif" alt="ChatGPT Marketing Assistants">
+          <div class="course-overlay">
+            <div class="course-preview">
+              <h4>Course Preview</h4>
+              <p>Master the power of AI marketing assistants to streamline your workflow and increase productivity.</p>
+              <div class="preview-topics">
+                <span>AI for marketing</span>
+                <span>Content creation</span>
+                <span>Automation strategies</span>
+              </div>
+              <button class="add-to-cart">Add to cart</button>
+              <button class="add-to-wishlist"><i class="far fa-heart"></i> Add to wishlist</button>
+            </div>
+          </div>
+        </div>
+        <h3>ChatGPT, DeepSeek, Grok and 30+ More AI Marketing Assistants</h3>
+        <p class="instructor">Anton Richards, Anton Volinskas Support</p>
+        <div class="course-rating">
+          <span class="rating-score">4.8</span>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <span class="rating-count">(926)</span>
+        </div>
+        <div class="course-price">
+          <span class="price-current">€7.99</span>
+          <span class="price-original">€79.99</span>
+        </div>
+        <div class="badge-container">
+          <span class="premium-badge">Premium</span>
+        </div>
+        
+      </div>
+
+      <div class="course-card">
+        <div class="course-image">
+          <img src="assets/SEO.jfif" alt="Mastering SEO With ChatGPT">
+          <div class="course-overlay">
+            <div class="course-preview">
+              <h4>Course Preview</h4>
+              <p>Learn how to leverage ChatGPT for SEO optimization, keyword research, and content creation.</p>
+              <div class="preview-topics">
+                <span>SEO fundamentals</span>
+                <span>AI-powered research</span>
+                <span>Content optimization</span>
+              </div>
+              <button class="add-to-cart">Add to cart</button>
+              <button class="add-to-wishlist"><i class="far fa-heart"></i> Add to wishlist</button>
+            </div>
+          </div>
+        </div>
+        <h3>Mastering SEO With ChatGPT: Ultimate Beginner's Guide</h3>
+        <p class="instructor">Adam Johnson, Anton Volinskas Support</p>
+        <div class="course-rating">
+          <span class="rating-score">4.5</span>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <span class="rating-count">(708)</span>
+        </div>
+        <div class="course-price">
+          <span class="price-current">€7.99</span>
+          <span class="price-original">€64.99</span>
+        </div>
+        <div class="badge-container">
+          <span class="premium-badge">Premium</span>
+        </div>
+        
+      </div>
+
+      <div class="course-card">
+        <div class="course-image">
+          <img src="assets/MASTERSOCIAL.jfif" alt="Upgrade Your Social Media">
+          <div class="course-overlay">
+            <div class="course-preview">
+              <h4>Course Preview</h4>
+              <p>Enhance your social media presence using ChatGPT for content creation, engagement, and strategy.</p>
+              <div class="preview-topics">
+                <span>Content strategy</span>
+                <span>Audience engagement</span>
+                <span>Analytics & optimization</span>
+              </div>
+              <button class="add-to-cart">Add to cart</button>
+              <button class="add-to-wishlist"><i class="far fa-heart"></i> Add to wishlist</button>
+            </div>
+          </div>
+        </div>
+        <h3>Upgrade Your Social Media Presence with ChatGPT</h3>
+        <p class="instructor">Aiden Richards, Anton Volinskas Support</p>
+        <div class="course-rating">
+          <span class="rating-score">4.6</span>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <span class="rating-count">(287)</span>
+        </div>
+        <div class="course-price">
+          <span class="price-current">€7.99</span>
+          <span class="price-original">€69.99</span>
+        </div>
+        <div class="badge-container">
+          <span class="premium-badge">Premium</span>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="show-all-container">
+      <button class="show-all-btn">Show all Data Science courses</button>
+    </div>
+  </section>
+
+
+  <!-- trusted brands -->
+  
+  <div class="logo-bar">
+    <p>Trusted by over 16,000 companies and millions of learners around the world</p>
+    <div>
+      <img src="assets/volkswagen_logo.svg" alt="VW" />
+      <img src="assets/samsung_logo.svg" alt="Samsung" />
+      <img src="assets/cisco_logo.svg" alt="Cisco" />
+      <img src="assets/vimeo_logo_resized-2.svg" alt="Vimeo" />
+      <img src="assets/procter_gamble_logo.svg" alt="P&G" />
+      <img src="assets/hewlett_packard_enterprise_logo.svg" alt="HP" />
+      <img src="assets/citi_logo.svg" alt="Citi" />
+      <img src="assets/ericsson_logo.svg" alt="Ericsson" />
+    </div>
+  </div>
+
+  <!-- Learners are viewing -->
+  <h2 class="section-title">Learners are viewing</h2>
+  <div class="card-wrapper">
+    <div class="card-container">
+      
+      <!-- Card 1 with hover -->
+      <div class="card">
+        <img src="assets/python_boot.jfif" alt="Course">
+        <div class="card-body">
+          <div class="card-title">100 Days of Code: The Complete Python Pro Bootcamp</div>
+          <div class="card-author">Dr. Angela Yu</div>
+          <div class="rating"><span>4.7</span> <span class="stars">★★★★★</span> <span>(364,208)</span></div>
+          <div class="price">₹3,279</div>
+          <div class="tags">
+            <span class="tag purple">Premium</span>
+            <span class="tag green">Bestseller</span>
+          </div>
+        </div>
+        <div class="hover-preview">
+          <h4>100 Days of Code: The Complete Python Pro Bootcamp</h4>
+          <div class="tags">
+            <span class="tag purple">Premium</span>
+            <span class="tag green">Bestseller</span>
+          </div>
+          <div class="meta">Updated April 2025 • All Levels • 56.6 total hours</div>
+          <p>Master Python by building 100 projects in 100 days. Learn data science, automation, web apps & more.</p>
+          <ul>
+            <li>You will master Python programming</li>
+            <li>You will learn automation, game, app & web development</li>
+            <li>You’ll be able to code in Python professionally</li>
+          </ul>
+          <button>Add to cart</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <img src="assets/the100.jfif" alt="Course">
+        <div class="card-body">
+          <div class="card-title">Full-Stack Web Dev Bootcamp</div>
+          <div class="card-author">Dr. Angela Yu</div>
+          <div class="rating"><span>4.7</span> <span class="stars">★★★★★</span> <span>(433,616)</span></div>
+          <div class="price">₹3,109</div>
+          <div class="tags">
+            <span class="tag purple">Premium</span>
+            <span class="tag green">Bestseller</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <img src="assets/aws_practinoer.jfif" alt="Course">
+        <div class="card-body">
+          <div class="card-title">AWS Cloud Practitioner CLF-C02 2025</div>
+          <div class="card-author">Stephane Maarek</div>
+          <div class="rating"><span>4.7</span> <span class="stars">★★★★★</span> <span>(245,683)</span></div>
+          <div class="price">₹3,629</div>
+          <div class="tags">
+            <span class="tag purple">Premium</span>
+            <span class="tag green">Bestseller</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card">
+        <img src="assets/solutionarchi.jfif" alt="Course">
+        <div class="card-body">
+          <div class="card-title">AWS Solutions Architect Associate</div>
+          <div class="card-author">Stephane Maarek</div>
+          <div class="rating"><span>4.7</span> <span class="stars">★★★★★</span> <span>(254,891)</span></div>
+          <div class="price">₹3,629</div>
+          <div class="tags">
+            <span class="tag purple">Premium</span>
+            <span class="tag green">Bestseller</span>
+          </div>
+        </div>
+      </div>
+
+      </div>
+      </div>
+    
+    <!-- new feature - freelancerhub -->
+
+    <div class="freelancer-section" id="freelancer_hub">
+      <div class="content">
+        <h2>Become a certified <span>freelancer</span> <i class="icon">🎖️</i></h2>
+        
+        <div class="step">
+          <img src="assets/graduation-cap.png" alt="course icon" />
+          <div>
+            <h3>Complete Courses</h3>
+            <p>Learn in-demand skills from industry experts through engaging video lessons and hands-on projects.</p>
+          </div>
+        </div>
+    
+        <div class="step">
+          <img src="assets/test.png" alt="test icon" />
+          <div>
+            <h3>Take Tests</h3>
+            <p>Validate your knowledge with skill-based assessments and earn certifications that prove your expertise.</p>
+          </div>
+        </div>
+    
+        <div class="step">
+          <img src="assets/earn.png" alt="earn icon" />
+          <div>
+            <h3>Start Earning</h3>
+            <p>Validate your knowledge with skill-based assessments and earn certifications that prove your expertise.</p>
+          </div>
+        </div>
+    
+        <button class="button-free btn-start">Start your journey ➜</button>
+      </div>
+    
+      <div class="image-free">
+        <img src="assets/freelancer.jpeg" alt="Freelancer illustration" />
+      </div>
+    </div>
+
+
+
+
+
+
+   
+    <!-- goal-section -->
+
+     <section class="learning-goals">
+      <div class="learning-goals__inner">
+        
+        <!-- Left side: the four goal cards -->
+        <div class="learning-goals__left">
+          <h2 class="learning-goals__title">Learning focused on your goals</h2>
+          <div class="learning-goals__list">
+            
+            <div class="learning-goals__item learning-goals__item--active">
+              <div class="learning-goals__icon">🧠</div>
+              <div class="learning-goals__content">
+                <h4>Hands‑on training</h4>
+                <p>Upskill effectively with AI‑powered coding exercises, practice tests, and quizzes.</p>
+              </div>
+            </div>
+            
+            <div class="learning-goals__item">
+              <div class="learning-goals__icon">🎓</div>
+              <div class="learning-goals__content">
+                <h4>Certification prep</h4>
+                <p>Prep for industry‑recognized certifications by solving real‑world challenges and earning badges.</p>
+                <a href="#">Explore courses →</a>
+              </div>
+            </div>
+            
+            <div class="learning-goals__item">
+              <div class="learning-goals__icon">📊</div>
+              <div class="learning-goals__content">
+                <h4>Insights and analytics <span class="enterprise-badge">Enterprise Plan</span></h4>
+                <p>Fast‑track goals with advanced insights plus a dedicated success team.</p>
+                <a href="#">Find out more →</a>
+              </div>
+            </div>
+            
+            <div class="learning-goals__item">
+              <div class="learning-goals__icon">🛠️</div>
+              <div class="learning-goals__content">
+                <h4>Customizable content <span class="enterprise-badge">Enterprise Plan</span></h4>
+                <p>Create tailored learning paths, host your own content and resources.</p>
+                <a href="#">Find out more →</a>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <!-- Right side: the preview image -->
+        <div class="learning-goals__right">
+          <img
+            src="assets/goal-sec-image.jpg"
+            alt="Learning analytics preview"
+            class="learning-goals__image"
+          />
+        </div>
+        
+      </div>
+    </section>
+
+   <!-- team-plans -->
+    
+   <!-- Pricing Plans Section -->
+<section class="pricing-section">
+  <div class="pricing-container">
+    <h2 class="pricing-title">Accelerate growth — for you or your organization</h2>
+    <p class="pricing-subtitle">Reach goals faster with one of our plans or programs. Try one free today or contact sales to learn more.</p>
+    
+    <div class="pricing-cards">
+      <!-- Personal Plan Card -->
+      <div class="pricing-card">
+        <div class="plan-header">
+          <h3 class="plan-title">Personal Plan</h3>
+          <p class="plan-subtitle">For you</p>
+          <div class="plan-user-info">
+            <span class="user-icon"><i class="fas fa-user"></i></span>
+            <span class="user-count">Individual</span>
+          </div>
+        </div>
+        
+        <div class="plan-price">
+          <h4>Starting at ₹850 per month</h4>
+          <p class="billing-info">Billed monthly or annually. Cancel anytime.</p>
+        </div>
+        
+        <button class="subscription-btn">
+          Start subscription
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        
+        <ul class="features-list">
+          <li><i class="fas fa-check-circle"></i> Access to 12,000+ top courses</li>
+          <li><i class="fas fa-check-circle"></i> Certification prep</li>
+          <li><i class="fas fa-check-circle"></i> Goal-focused recommendations</li>
+          <li><i class="fas fa-check-circle"></i> AI-powered coding exercises</li>
+        </ul>
+      </div>
+      
+      <!-- Team Plan Card -->
+      <div class="pricing-card">
+        <div class="plan-header">
+          <h3 class="plan-title">Team Plan</h3>
+          <p class="plan-subtitle">For your team</p>
+          <div class="plan-user-info">
+            <span class="user-icon"><i class="fas fa-users"></i></span>
+            <span class="user-count">2 to 20 people</span>
+          </div>
+        </div>
+        
+        <div class="plan-price">
+          <h4>₹2,000 a month per user</h4>
+          <p class="billing-info">Billed annually. Cancel anytime.</p>
+        </div>
+        
+        <button class="subscription-btn">
+          Start subscription
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        
+        <ul class="features-list">
+          <li><i class="fas fa-check-circle"></i> Access to 12,000+ top courses</li>
+          <li><i class="fas fa-check-circle"></i> Certification prep</li>
+          <li><i class="fas fa-check-circle"></i> Goal-focused recommendations</li>
+          <li><i class="fas fa-check-circle"></i> AI-powered coding exercises</li>
+          <li><i class="fas fa-check-circle"></i> Analytics and adoption reports</li>
+        </ul>
+      </div>
+      
+      <!-- Enterprise Plan Card -->
+      <div class="pricing-card">
+        <div class="plan-header">
+          <h3 class="plan-title">Enterprise Plan</h3>
+          <p class="plan-subtitle">For your whole organization</p>
+          <div class="plan-user-info">
+            <span class="user-icon"><i class="fas fa-building"></i></span>
+            <span class="user-count">More than 20 people</span>
+          </div>
+        </div>
+        
+        <div class="plan-price">
+          <h4>Contact sales for pricing</h4>
+        </div>
+        
+        <button class="demo-btn">
+          Request a demo
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        
+        <ul class="features-list">
+          <li><i class="fas fa-check-circle"></i> Access to 27,000+ top courses</li>
+          <li><i class="fas fa-check-circle"></i> Certification prep</li>
+          <li><i class="fas fa-check-circle"></i> Goal-focused recommendations</li>
+          <li><i class="fas fa-check-circle"></i> AI-powered coding exercises</li>
+          <li><i class="fas fa-check-circle"></i> Advanced analytics and insights</li>
+          <li><i class="fas fa-check-circle"></i> Dedicated customer success team</li>
+          <li><i class="fas fa-check-circle"></i> International course collection featuring 15 languages</li>
+          <li><i class="fas fa-check-circle"></i> Customizable content</li>
+          <li><i class="fas fa-check-circle"></i> Hands-on tech training with add-on</li>
+          <li><i class="fas fa-check-circle"></i> Strategic implementation services with add-on</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- testemonial -->
+<div class="container" style="background: #F6F7F9;">
+  <h2 class="testimonial-heading">See what others are achieving through learning</h2>
+  
+  <div class="testimonial-grid">
+      <div class="testimonial-card">
+          <div class="quote-mark">“</div>
+          <p class="testimonial-text">
+              Udemy was rated the most popular online course or certification program for learning how to code according to StackOverflow's 2023 Developer Survey.
+          </p>
+          <div class="user-info">
+              <img src="assets/stack.png" alt="StackOverflow logo" class="user-avatar">
+              <div class="user-details">
+                  <div class="user-name">
+                      stackoverflow
+                  </div>
+                  <div class="user-title">37,076 responses collected</div>
+              </div>
+          </div>
+          <a href="#" class="cta-link">View Web Development courses <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="#5624d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+
+      <div class="testimonial-card">
+          <div class="quote-mark">“</div>
+          <p class="testimonial-text">
+              Udemy was truly a game-changer and a great guide for me as we brought Dimensional to life.
+          </p>
+          <div class="user-info">
+              <img src="assets/Alvin_Lim.jpeg" alt="Alvin Lim" class="user-avatar">
+              <div class="user-details">
+                  <div class="user-name">Alvin Lim</div>
+                  <div class="user-title">Technical Co-Founder, CTO at Dimensional</div>
+              </div>
+          </div>
+          <a href="#" class="cta-link">View this iOS & Swift course <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="#5624d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+
+      <div class="testimonial-card">
+          <div class="quote-mark">“</div>
+          <p class="testimonial-text">
+              Udemy gives you the ability to be persistent. I learned exactly what I needed to know in the real world. It helped me set myself to <span class="highlight">get a new role</span>.
+          </p>
+          <div class="user-info">
+              <img src="assets/William_A_Wachlin.jpeg" alt="William A. Wachtel" class="user-avatar">
+              <div class="user-details">
+                  <div class="user-name">William A. Wachtel</div>
+                  <div class="user-title">Partner Account Manager at Amazon Web Services</div>
+              </div>
+          </div>
+          <a href="#" class="cta-link">View this AWS course <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="#5624d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+
+      <div class="testimonial-card">
+          <div class="quote-mark">“</div>
+          <p class="testimonial-text">
+              With Udemy Business employees were able to marry the two together: technology and consulting soft skills... to help <span class="highlight">drive their careers forward</span>.
+          </p>
+          <div class="user-info">
+              <img src="assets/Ian_Stevens.png" alt="Ian Stevens" class="user-avatar">
+              <div class="user-details">
+                  <div class="user-name">Jim Stevens</div>
+                  <div class="user-title">Head of Capability Development, North America at Publicis Sapient</div>
+              </div>
+          </div>
+          <a href="#" class="cta-link">Read full story <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="#5624d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+  </div>
+</div>
+
+<!-- Report Promo Section -->
+<section class="report-section">
+  <div class="report-container">
+    <!-- Left Content -->
+    <div class="report-text">
+      <h2 class="report-title">Top trends for the future of work</h2>
+      <p class="report-desc">
+        Our 2025 Global Learning & Skills Trends Report is out now! Find out how to build the skills to keep pace with change.
+      </p>
+      <a href="#" class="report-button">Get the report →</a>
+    </div>
+
+    <!-- Right Image -->
+    <div class="report-images">
+      <img src="assets/tilt-card.jpg" alt="2025 Trends Report" class="main-report" />
+
+    </div>
+  </div>
+</section>
+
+<section class="trending-section">
+  <div class="trending-container">
+      <h2 class="trending-title">Trending Now</h2>
+      
+      <div class="trending-highlight">
+          <h3>ChatGPT is a top skill</h3>
+          <a href="#" class="trending-link">See ChatGPT courses</a>
+          <span class="learners">4,371,629 learners</span>
+      </div>
+
+      <div class="trending-categories">
+          <div class="trending-category">
+              <h4>Development</h4>
+              <div class="trending-item">
+                  <a href="#">Python</a>
+                  <span class="learners">47,458,097 learners</span>
+              </div>
+              <div class="trending-item">
+                  <a href="#">Web Development</a>
+                  <span class="learners">14,933,753 learners</span>
+              </div>
+              <div class="trending-item">
+                  <a href="#">Data Science</a>
+                  <span class="learners">7,894,749 learners</span>
+              </div>
+          </div>
+
+          <div class="trending-category">
+              <h4>Design</h4>
+              <div class="trending-item">
+                  <a href="#">Blender</a>
+                  <span class="learners">2,947,181 learners</span>
+              </div>
+              <div class="trending-item">
+                  <a href="#">Graphic Design</a>
+                  <span class="learners">4,567,468 learners</span>
+              </div>
+              <div class="trending-item">
+                  <a href="#">User Experience (UX) Design</a>
+                  <span class="learners">2,073,961 learners</span>
+              </div>
+          </div>
+
+          <div class="trending-category">
+              <h4>Business</h4>
+              <div class="trending-item">
+                  <a href="#">PMI Project Management Professional (PMP)</a>
+                  <span class="learners">2,574,825 learners</span>
+              </div>
+              <div class="trending-item">
+                  <a href="#">Microsoft Power BI</a>
+                  <span class="learners">2,654,399 learners</span>
+              </div>
+              <div class="trending-item">
+                  <a href="#">Project Management</a>
+                  <span class="learners">4,065,046 learners</span>
+              </div>
+          </div>
+      </div>
+
+      <a href="#" class="trending-show-all">Show all trending skills</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-top">
+      <div class="footer-links">
+          <div class="footer-column">
+              <h3>Top companies choose Udemy Business</h3>
+              <div class="company-logos">
+                  <img src="assets/nasdaq-light.svg" alt="Nasdaq">
+                  <img src="assets/volkswagen-light.svg" alt="Volkswagen">
+
+                  <img src="assets/netapp-light.svg" alt="NetApp">
+                  <img src="assets/eventbrite-light.svg" alt="Eventbrite">
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="footer-main">
+      <div class="footer-grid">
+          <div class="footer-column">
+              <h4>Explore</h4>
+              <ul>
+                  <li><a href="#">Web Development</a></li>
+                  <li><a href="#">Mobile Development</a></li>
+                  <li><a href="#">Game Development</a></li>
+                  <li><a href="#">Entrepreneurship</a></li>
+                  <li><a href="#">Business Analytics</a></li>
+                  <li><a href="#">Digital Marketing</a></li>
+              </ul>
+          </div>
+
+          <div class="footer-column">
+              <h4>Categories</h4>
+              <ul>
+                  <li><a href="#">Python</a></li>
+                  <li><a href="#">Data Science</a></li>
+                  <li><a href="#">AWS Certification</a></li>
+                  <li><a href="#">Drawing</a></li>
+              </ul>
+          </div>
+
+          <div class="footer-column">
+              <h4>Support</h4>
+              <ul>
+                  <li><a href="#">Help and Support</a></li>
+                  <li><a href="#">Affiliate</a></li>
+                  <li><a href="#">Udemy Business</a></li>
+                  <li><a href="#">Get the app</a></li>
+              </ul>
+          </div>
+
+          <div class="footer-column">
+              <h4>Terms</h4>
+              <ul>
+                  <li><a href="#">Privacy Policy</a></li>
+                  <li><a href="#">Cookie Settings</a></li>
+                  <li><a href="#">Sitemap</a></li>
+                  <li><a href="#">Accessibility Statement</a></li>
+              </ul>
+          </div>
+
+          <div class="footer-column">
+              <div class="language-selector">
+                  <button class="language-btn">
+                      <i class="fas fa-globe"></i>
+                      English
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="footer-bottom">
+      <img src="assets/logo-udemy-inverted.svg" alt="Udemy" class="footer-logo">
+      <p class="copyright">© 2024 Udemy, Inc.</p>
+  </div>
+</footer>
+
+
+  <script>
+    // Carousel Controls
+    let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) { slideIndex = 1 }
+  if (n < 1) { slideIndex = slides.length }
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex - 1].style.display = "flex";
+  dots[slideIndex - 1].className += " active";
+}
+
+
+    // Skill Courses Data
+    const skillCourses = {
+      "Data Science": [
+        { title: "ChatGPT", learners: "4M+ learners" },
+        { title: "Data Science", learners: "7M+ learners" },
+        { title: "Python", learners: "4.7M+ learners" },
+        { title: "Machine Learning", learners: "8M+ learners" },
+        { title: "Deep Learning", learners: "2M+ learners" },
+        { title: "AI", learners: "4M+ learners" },
+        { title: "Statistics", learners: "1M+ learners" },
+        { title: "NLP", learners: "817K learners" },
+      ],
+      "IT Certifications": [
+        { title: "AWS Certified", learners: "1.2M+ learners" },
+        { title: "Cisco CCNA", learners: "800K+ learners" },
+        { title: "CompTIA A+", learners: "1M+ learners" },
+        { title: "Microsoft Azure", learners: "950K+ learners" },
+        { title: "Google Cloud", learners: "680K+ learners" },
+        { title: "Security+", learners: "730K+ learners" },
+      ],
+      "Leadership": [
+        { title: "Team Building", learners: "650K+ learners" },
+        { title: "Emotional Intelligence", learners: "420K+ learners" },
+        { title: "Management Skills", learners: "1.5M+ learners" },
+        { title: "Coaching", learners: "320K+ learners" },
+        { title: "Conflict Resolution", learners: "250K+ learners" },
+        { title: "Decision Making", learners: "380K+ learners" },
+      ],
+      "Web Development": [
+        { title: "JavaScript", learners: "13M+ learners" },
+        { title: "React", learners: "5.2M+ learners" },
+        { title: "CSS", learners: "7.8M+ learners" },
+        { title: "Angular", learners: "3.1M+ learners" },
+        { title: "Node.js", learners: "4.3M+ learners" },
+        { title: "HTML", learners: "12M+ learners" },
+      ],
+      "Communication": [
+        { title: "Public Speaking", learners: "2.8M+ learners" },
+        { title: "Writing", learners: "3.2M+ learners" },
+        { title: "Presentation Skills", learners: "1.9M+ learners" },
+        { title: "Business Communication", learners: "2.4M+ learners" },
+        { title: "Negotiation", learners: "1.2M+ learners" },
+      ],
+      "Business Analytics & Intelligence": [
+        { title: "SQL", learners: "5.7M+ learners" },
+        { title: "Tableau", learners: "2.8M+ learners" },
+        { title: "Power BI", learners: "3.1M+ learners" },
+        { title: "Excel", learners: "9.8M+ learners" },
+        { title: "Data Visualization", learners: "2.2M+ learners" },
+      ]
+    };
+
+    const carousel = document.getElementById("courseCarousel");
+    const leftBtn = document.querySelector(".left-btn");
+    const rightBtn = document.querySelector(".right-btn");
+    const showAllBtn = document.querySelector(".show-all-btn");
+
+    // Render courses for a given skill
+    function renderCourses(skill) {
+      carousel.innerHTML = "";
+      const list = skillCourses[skill] || [];
+      list.forEach((c, i) => {
+        const div = document.createElement("div");
+        div.className = "course" + (i === 0 ? " active-course" : "");
+        div.innerHTML = `<strong>${c.title}</strong><small>${c.learners}</small>`;
+        carousel.appendChild(div);
+      });
+      
+      // Update the show all button text
+      showAllBtn.textContent = `Show all ${skill} courses`;
+      
+      updateNavButtons();
+    }
+
+    // Tab click handling
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelector(".tab.active").classList.remove("active");
+        tab.classList.add("active");
+        renderCourses(tab.dataset.skill);
+      });
+    });
+
+    // Course item click handling
+    carousel.addEventListener("click", (e) => {
+      const course = e.target.closest(".course");
+      if (course) {
+        document.querySelectorAll(".course").forEach(c => {
+          c.classList.remove("active-course");
+        });
+        course.classList.add("active-course");
+      }
+    });
+
+    // Scroll & nav button logic
+    function updateNavButtons() {
+      leftBtn.style.display = carousel.scrollLeft > 0 ? "block" : "none";
+      rightBtn.style.display = carousel.scrollLeft + carousel.clientWidth < carousel.scrollWidth
+        ? "block" : "none";
+    }
+
+    function scrollCourses(dir) {
+      carousel.scrollBy({ left: dir * 300, behavior: "smooth" });
+    }
+
+    leftBtn.addEventListener("click", () => scrollCourses(-1));
+    rightBtn.addEventListener("click", () => scrollCourses(1));
+    carousel.addEventListener("scroll", updateNavButtons);
+
+    // Initialize on page load
+    window.addEventListener("load", () => {
+      renderCourses("Data Science");
+      updateNavButtons();
+      
+      // Add hover effects for course cards
+      const courseCards = document.querySelectorAll('.course-card');
+      courseCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-8px)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+        });
+      });
+    });
+
+  // Select all tabs and add click event
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function () {
+        // Remove 'active' class from all tabs
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+        // Add 'active' class to the clicked tab
+        this.classList.add('active');
+
+        // Get the skill associated with the clicked tab
+        const skill = this.getAttribute('data-skill');
+
+        // Hide all course pills
+        document.querySelectorAll('.course-pill').forEach(pill => pill.style.display = 'none');
+
+        // Show course pills matching the skill
+        document.querySelectorAll(`.course-pill strong`).forEach(pill => {
+            if (pill.innerText.includes(skill)) {
+                pill.parentElement.style.display = 'block';
+            }
+        });
+    });
+});
+
+
+  </script>
+</body>
+</html>
